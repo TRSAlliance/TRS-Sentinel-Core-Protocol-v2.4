@@ -1,23 +1,20 @@
 {
-  "name": "trsalliance",
+  "name": "trsalliance-landing",
   "version": "1.0.0",
-  "description": "TRS Alliance - Trust Recognition System landing page",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build":  "vite build",
+    "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && git add dist && git commit -m 'Deploy build' && git push"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.2",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
-    "vite": "^5.4.8"
+    "deploy:netlify": "npm run build && netlify deploy --prod --dir=dist",
+    "deploy:vercel": "npm run build && vercel --prod"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "vite": "^5.4.8"
   }
 }
