@@ -1,10 +1,16 @@
+// vercel.json
 {
   "version": 2,
-  "framework": "vite",
-  "build": {
-    "env": {
-      "VITE_BUILD_ENV": "production"
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build"
     }
-  },
-  "outputDirectory": "dist"
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
