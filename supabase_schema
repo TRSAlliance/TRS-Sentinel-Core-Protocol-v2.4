@@ -1,0 +1,33 @@
+-- Create the main database schema (save this as supabase_schema/01_init.sql)
+CREATE TABLE IF NOT EXISTS trs_system_metrics (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workflow_name TEXT NOT NULL,
+    status TEXT NOT NULL,
+    conclusion TEXT,
+    run_id BIGINT NOT NULL,
+    duration_ms INTEGER,
+    event TEXT NOT NULL,
+    run_started_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS trs_audit_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    actor TEXT NOT NULL,
+    action TEXT NOT NULL,
+    target TEXT,
+    details JSONB,
+    ip_address INET,
+    user_agent TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS trs_security_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_type TEXT NOT NULL,
+    severity TEXT NOT NULL CHECK (severity IN ('low', 'medium', 'high', 'critical')),
+    description TEXT,
+    payload JSONB,
+    resolved_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
