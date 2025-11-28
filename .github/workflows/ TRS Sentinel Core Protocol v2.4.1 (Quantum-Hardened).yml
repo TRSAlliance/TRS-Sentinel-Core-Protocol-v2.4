@@ -1,7 +1,6 @@
 name: 🛡️ TRS Sentinel Core Protocol v2.4.1 (Quantum-Hardened)
 
 on:
-  # The Quantum Authentication Gate requires a token for manual runs.
   workflow_dispatch:
     inputs:
       auth_token:
@@ -9,13 +8,12 @@ on:
         required: true
         type: password
   
-  # Trigger on changes to core system files.
   push:
     branches: [main]
     paths:
       - 'src/**'
       - 'scripts/**'
-      # WARNING: This path is circular, typically you reference the workflow name itself.
+     
       - '.github/workflows/TRS Sentinel Core Protocol v2.4.1 (Quantum-Hardened).yml' 
 
 env:
@@ -35,8 +33,7 @@ jobs:
       crypto_fingerprint: ${{ steps.key_validation.outputs.fingerprint }}
     
     steps:
-      # 1. Validate Quantum Token
-      # NOTE: This only checks if the token's hash matches a stored hash, not a true authentication.
+      
       - name: Validate Quantum Token
         run: |
           # Use a constant-time comparison in a dedicated action for production security.
@@ -48,15 +45,13 @@ jobs:
               exit 137
           fi
 
-      # 2. Secure Airgap Checkout
       - name: Airgap Checkout
         uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.TRS_DEPLOY_KEY }}
           persist-credentials: false
           lfs: ${{ env.AIRGAP_ENABLED }}
-
-      # 3. Key Validation & Seal Generation (using custom actions)
+          
       - name: Validate Crypto Keys
         id: key_validation
         uses: ./.github/actions/validate-keys@v3
@@ -76,7 +71,6 @@ jobs:
         env:
           TRS_SEAL_KEY: ${{ secrets.TRS_QUANTUM_SEAL_KEY }}
 
-      # 4. Threat Scan
       - name: Threat Scan
         id: threat_scan
         uses: ./.github/actions/threat-scan@v4
@@ -94,7 +88,7 @@ jobs:
     timeout-minutes: 19 # Quantum seal expiry buffer
     
     steps:
-      # 1. Validate Quantum Seal
+     
       - name: Validate Quantum Seal
         run: |
           # The script is assumed to handle the database connection for validation
